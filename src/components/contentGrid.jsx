@@ -10,7 +10,7 @@ const ContentGrid = () => {
             <div className="welcome-card">
                 <div className="welcome-text">
                     <h2>Realiza Reservaciones desde nuestra página web</h2>
-                    <div>
+                    <div className="btn-action">
                         <Link to="/reservaciones">
                             <button>Reservar</button>
                         </Link>

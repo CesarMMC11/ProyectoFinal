@@ -7,7 +7,7 @@ const Header = () => {
             <div className="container">
                 <div className="header-content">
                     <Link to="" className="logo">
-                    <img src="" alt="" />
+                    <img src="../../imagenes/logoCP.jpg" alt="" />
                         PADEL CLUB COMMAND PARK
                     </Link>
                     <nav>

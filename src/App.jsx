@@ -6,6 +6,7 @@ import Home from '../pages/home';
 import Reservaciones from '../pages/reservaciones';
 import Torneo from '../pages/torneos';
 import Clases from '../pages/clases'
+import Perfil from '../pages/perfil'
 
 
 
@@ -18,6 +19,8 @@ const App = () => {
         <Route path="/reservaciones" element={<Reservaciones />} />
         <Route path="/torneos" element={<Torneo />} />
         <Route path="/clases" element={<Clases />} />
+        <Route path="/perfil" element={<Perfil />} />
+
       </Routes>
     </Router>
   );

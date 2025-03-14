@@ -7,7 +7,7 @@ const ContentWT = () => {
         <div className="container">
         <section className="content-WT">
             {/* Welcome Card */}
-            <div className="welcome-card">
+            <div className="welcome-card3">
                 <div className="welcome-text">
                     <h2>Realiza Reservaciones desde nuestra página web</h2>
                     <div>
