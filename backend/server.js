@@ -7,6 +7,8 @@ const app = express();
 // const port = process.env.PORT;
 // const host = process.env.HOST;
 
+app.use(express.json());
+app.use('/api', require('./routes/userRoutes'));
 
 app.use(bodyParser.json());
 app.use(cors({
