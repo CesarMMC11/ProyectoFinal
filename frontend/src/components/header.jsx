@@ -1,11 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Header = () => {
 const [isMenuOpen, setIsMenuOpen] = useState(false);
+const navigate = useNavigate();
 
 const toggleMenu = () => {
 setIsMenuOpen(!isMenuOpen);
+};
+
+const handleLogout = () => {
+localStorage.removeItem("token");
+navigate("/login");
 };
 
 return (
@@ -29,8 +36,9 @@ return (
             <li><Link to="/torneos">Torneos</Link></li>
             <li><Link to="/clases">Clases</Link></li>
             <li><Link to="/perfil">Perfil</Link></li>
-            <li><Link to="/login">Iniciar Sesión</Link></li>
-            <li><Link to="/registro">Registrarse</Link></li>
+            <li>
+                <button onClick={handleLogout} className="logout-btn">Cerrar Sesión</button>
+            </li>
         </ul>
         </nav>
     </div>

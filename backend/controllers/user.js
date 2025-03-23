@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const SECRET_KEY = 'llave secreta'
 
 //COnfiguracion de JWT
 
@@ -50,7 +51,7 @@ const userController = {
             }
 
             //Generar un token
-            const token = jwt.sign({ userID: user.id}, JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ userID: user.id, rol: user.rol }, SECRET_KEY, { expiresIn: '1h' });
 
             response.status(200).json({ message: 'Incio de sesion exitoso', token });
         } catch (error) {
