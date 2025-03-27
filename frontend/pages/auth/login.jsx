@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../src/components/logo';
 import Footer from '../../src/components/footer';
 
@@ -9,7 +9,7 @@ const Login = ({ setIsAuthenticated }) => {
         password: '',
     });
     const [error, setError] = useState('');
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,14 +33,27 @@ const Login = ({ setIsAuthenticated }) => {
             });
 
             const data = await response.json();
+        
+            // En la función handleSubmit de tu componente Login.jsx
             if (response.ok) {
                 alert(data.message); // Inicio de sesión exitoso
                 localStorage.setItem('token', data.token); // Guarda el token
+                
+                // Guardar el rol del usuario
+                localStorage.setItem('userRole', data.user.rol || 'user');
+                
                 setIsAuthenticated(true); // Actualiza el estado de autenticación
-                navigate('/'); // Redirige al usuario a la página de inicio
+                
+                // Redirigir según el rol
+                if (data.user.rol === 'admin') {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/'); // Redirige al usuario regular a la página de inicio
+                }
             } else {
                 setError(data.message || 'Error al iniciar sesión');
             }
+
         } catch (error) {
             console.error('Error en el login:', error);
             setError('Error al conectar con el servidor');

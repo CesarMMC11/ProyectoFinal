@@ -37,28 +37,49 @@ const userController = {
     Login: async (request, response) => {
         try {
             const { email, password } = request.body;
-
-            //Verificar si el usuario existe
+    
+            // Verificar si el usuario existe
             const user = await User.findOne({ where: { email } });
             if (!user) {
                 return response.status(401).json({ message: 'Usuario no encontrado'});
             }
-
-            //Verificar la contraseña
+    
+            // Verificar la contraseña
             const passwordValid = await bcrypt.compare(password, user.password);
             if (!passwordValid) {
                 return response.status(401).json({ message: 'Contraseña incorrecta'});
             }
-
-            //Generar un token
-            const token = jwt.sign({ userID: user.id, rol: user.rol }, SECRET_KEY, { expiresIn: '1h' });
-
-            response.status(200).json({ message: 'Incio de sesion exitoso', token });
+    
+            // Generar un token
+            const token = jwt.sign({ 
+                userID: user.id, 
+                rol: user.rol 
+            }, SECRET_KEY, { expiresIn: '1h' });
+    
+            response.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV !== 'development',
+                maxAge: 3600000,
+            });
+    
+            // Incluir el rol del usuario en la respuesta
+            response.status(200).json({ 
+                message: 'Inicio de sesión exitoso', 
+                token,
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    lastname: user.lastname,
+                    email: user.email,
+                    rol: user.rol
+                }
+            });
         } catch (error) {
             console.log('Error al iniciar sesion', error);
             response.status(500).json({ message: 'Error al iniciar sesion', error: error.message})
         }
     },
+    
 
     changePassword: async (request, response) => {
         try {
@@ -94,26 +115,132 @@ const userController = {
 
     updateProfile: async (request, response) => {
         try {
-            const { id } = request.params;
-            const { name, lastname, email, profileImg, coverImg } = request.body;
+            // Obtener el ID del usuario del token
+            const userID = request.user.userID;
+            const { nombre, descripcion } = request.body;
 
-            //Verificar si el usuario existe
-
-            const user = await User.findByPk(id);
+            // Verificar si el usuario existe
+            const user = await User.findByPk(userID);
             if (!user) {
-                return response.status(404).json({ message: 'Usuario no encontrado'});
+                return response.status(404).json({ message: 'Usuario no encontrado' });
             }
 
-            //Actualizar los datos del usuario
+            // Actualizar los datos del usuario
+            await user.update({ 
+                name: nombre || user.name,
+                description: descripcion || user.description
+            });
 
-            await user.update({ name, lastname, email, profileImg, coverImg})
-
+            response.status(200).json({ 
+                message: 'Perfil actualizado con éxito',
+                user: {
+                    id: user.id,
+                    name: user.name,
+                    lastname: user.lastname,
+                    description: user.description,
+                    profileImg: user.profileImg,
+                    coverImg: user.coverImg
+                }
+            });
         } catch (error) {
             console.log('Error al actualizar perfil', error);
-            response.status(500).json({ message: 'Error al actualizar perfil', error: error.message})
+            response.status(500).json({ message: 'Error al actualizar perfil', error: error.message });
         }
     },
 
+    getProfile: async (request, response) => {
+        try {
+            // Obtener el ID del usuario del token
+            const userID = request.user.userID;
+
+            // Buscar el usuario en la base de datos
+            const user = await User.findByPk(userID);
+            if (!user) {
+                return response.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            // Devolver los datos del usuario
+            response.status(200).json({
+                id: user.id,
+                nombre: user.name,
+                apellido: user.lastname,
+                email: user.email,
+                descripcion: user.description,
+                fotoPerfil: user.profileImg,
+                fotoPortada: user.coverImg
+            });
+        } catch (error) {
+            console.log('Error al obtener perfil', error);
+            response.status(500).json({ message: 'Error al obtener perfil', error: error.message });
+        }
+    },
+
+    uploadProfileImage: async (request, response) => {
+        try {
+            // Verificar si hay un archivo
+            if (!request.file) {
+                return response.status(400).json({ message: 'No se ha subido ninguna imagen' });
+            }
+    
+            // Obtener el ID del usuario del token
+            const userID = request.user.userID;
+    
+            // Verificar si el usuario existe
+            const user = await User.findByPk(userID);
+            if (!user) {
+                return response.status(404).json({ message: 'Usuario no encontrado' });
+            }
+    
+            // Ruta relativa del archivo subido
+            const filePath = `/uploads/${request.file.filename}`;
+            
+            // Actualizar la base de datos
+            await user.update({ profileImg: filePath });
+    
+            response.status(200).json({
+                message: 'Imagen de perfil actualizada con éxito',
+                profileImg: filePath
+            });
+        } catch (error) {
+            console.log('Error al subir imagen de perfil', error);
+            response.status(500).json({ message: 'Error al subir imagen de perfil', error: error.message });
+        }
+    },
+    
+
+
+    uploadCoverImage: async (req, res) => {
+        try {
+            // Verificar si hay un archivo subido
+            if (!req.file) {
+                return res.status(400).json({ message: 'No se ha subido ninguna imagen' });
+            }
+            
+            // Obtener el ID del usuario del token (corregido para usar userID)
+            const userID = req.user.userID;
+            
+            // Ruta relativa del archivo subido
+            const filePath = `/uploads/${req.file.filename}`;
+            
+            // Actualizar la ruta de la imagen de portada en la base de datos
+            const user = await User.findByPk(userID);
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+            
+            user.coverImg = filePath;
+            await user.save();
+            
+            res.status(200).json({
+                message: 'Imagen de portada actualizada con éxito',
+                coverImg: filePath
+            });
+        } catch (error) {
+            console.error('Error al subir imagen de portada:', error);
+            res.status(500).json({ message: 'Error al subir imagen de portada', error: error.message });
+        }
+    },
+    
 
     logout: (request, response) => {
         try {

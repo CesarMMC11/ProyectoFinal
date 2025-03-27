@@ -1,24 +1,25 @@
 const Express = require('express');
 const router = Express.Router();
-const  reservaController  = require('../controllers/reservas');
+const reservaController = require('../controllers/reservas');
 const auth = require('../middleware/auth');
 
-//ruta para crear una reserva
+// Ruta para crear una reserva
 router.post('/create', auth, reservaController.createReserva);
 
-//ruta para obtener todas las reservas
-router.get('/', reservaController.obtenerReservas);
+// Ruta para obtener todas las reservas (añadido middleware auth)
+router.get('/', auth, reservaController.obtenerReservas);
 
-//ruta para obtener una reserva por su ID
+// Ruta para obtener una reserva por su ID
 router.get('/:id', auth, reservaController.obtenerReservaPorId);
 
-//ruta para obtener reserva por usuario
+// Ruta para obtener reserva por usuario
 router.get('/user/:userId', auth, reservaController.obtenerReservaPorUsuario);
 
-//ruta para actualizar una reserva
-router.put('/:id', auth, reservaController.actualizarReserva);
+// Ruta para obtener solo las reservas del usuario autenticado
+router.get('/user', auth, reservaController.obtenerReservasPorUsuarioAutenticado);
 
-//ruta para eliminar una reserva
-router.delete('/:id', auth, reservaController.eliminarReserva);
+// Rutas para actualizar y eliminar (modificadas para coincidir con el frontend)
+router.put('/update/:id', auth, reservaController.actualizarReserva);
+router.delete('/delete/:id', auth, reservaController.eliminarReserva);
 
 module.exports = router;

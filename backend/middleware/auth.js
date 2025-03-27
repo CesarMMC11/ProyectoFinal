@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'tu_secreto_aqui'; // Asegúrate de mantener este secreto seguro
+const SECRET_KEY = 'llave secreta'
 
 const auth = (request, response, next) => {
-    const token = request.cookies.token
+    const authHeader = request.header('Authorization');
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log(token);
+
 
     if (!token) {
         return response.status(401).send("No puedes ver esto, no estas autenticado");

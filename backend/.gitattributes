@@ -1,0 +1,20 @@
+# Establecer el comportamiento predeterminado
+* text=auto
+
+# Declarar archivos que siempre tendrán finales de línea CRLF
+*.js text eol=crlf
+*.jsx text eol=crlf
+*.json text eol=crlf
+*.css text eol=crlf
+*.html text eol=crlf
+
+# Declarar archivos que siempre tendrán finales de línea LF
+*.sh text eol=lf
+
+# Declarar archivos binarios que no deben ser modificados
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

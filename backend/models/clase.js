@@ -14,11 +14,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Clase.init({
-    userID: DataTypes.INTEGER,
-    Nombre: DataTypes.STRING,
-    Hora: DataTypes.TIME,
-    Telefono: DataTypes.STRING,
-    Fecha: DataTypes.DATEONLY
+    userID: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    Nombre: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    Hora: {
+      type: DataTypes.TIME,
+      allowNull: false
+    },
+    Telefono: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    Fecha: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Clase',
