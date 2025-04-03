@@ -11,36 +11,35 @@ const AdminDashboard = () => {
         totalTournaments: 0
     });
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
+                setLoading(true);
                 const token = localStorage.getItem('token');
                 
-                // Aquí deberías tener un endpoint para obtener estadísticas
-                // Por ahora, usaremos datos de ejemplo
-                // En un caso real, harías una petición al backend
+                if (!token) {
+                    throw new Error('No se encontró token de autenticación');
+                }
                 
-                // Ejemplo:
-                // const response = await fetch('http://localhost:3456/api/admin/stats', {
-                //     headers: {
-                //         'Authorization': `Bearer ${token}`
-                //     }
-                // });
-                // const data = await response.json();
-                // setStats(data);
-                
-                // Datos de ejemplo:
-                setStats({
-                    totalUsers: 25,
-                    totalReservations: 150,
-                    totalClasses: 45,
-                    totalTournaments: 12
+                const response = await fetch('http://localhost:3456/admin/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
                 
-                setLoading(false);
+                if (!response.ok) {
+                    throw new Error(`Error al obtener estadísticas: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                setStats(data);
+                setError(null);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error al cargar estadísticas:', error);
+                setError(error.message);
+            } finally {
                 setLoading(false);
             }
         };
@@ -53,34 +52,46 @@ const AdminDashboard = () => {
             <AdminSidebar />
             <div className="admin-content">
                 <AdminHeader title="Panel de Control" />
-                
+               
                 {loading ? (
-                    <p>Cargando estadísticas...</p>
+                    <div className="loading-container">
+                        <p>Cargando estadísticas...</p>
+                    </div>
+                ) : error ? (
+                    <div className="error-container">
+                        <p>Error: {error}</p>
+                        <button 
+                            className="retry-button"
+                            onClick={() => window.location.reload()}
+                        >
+                            Reintentar
+                        </button>
+                    </div>
                 ) : (
                     <div className="stats-grid">
-                        <StatsCard 
-                            title="Usuarios" 
-                            value={stats.totalUsers} 
-                            icon="👤" 
+                        <StatsCard
+                            title="Usuarios Registrados"
+                            value={stats.totalUsers}
+                            icon="👤"
                         />
-                        <StatsCard 
-                            title="Reservaciones" 
-                            value={stats.totalReservations} 
-                            icon="📅" 
+                        <StatsCard
+                            title="Reservaciones"
+                            value={stats.totalReservations}
+                            icon="📅"
                         />
-                        <StatsCard 
-                            title="Clases" 
-                            value={stats.totalClasses} 
-                            icon="🏋️" 
+                        <StatsCard
+                            title="Inscripcion a Clases"
+                            value={stats.totalClasses}
+                            icon="🏋️"
                         />
-                        <StatsCard 
-                            title="Torneos" 
-                            value={stats.totalTournaments} 
-                            icon="🏆" 
+                        <StatsCard
+                            title="Inscripcion a Torneos"
+                            value={stats.totalTournaments}
+                            icon="🏆"
                         />
                     </div>
                 )}
-                
+               
                 <div className="admin-card">
                     <h2>Acciones Rápidas</h2>
                     <div className="action-buttons">
@@ -98,7 +109,7 @@ const AdminDashboard = () => {
                         </button>
                     </div>
                 </div>
-                
+               
                 <div className="admin-card">
                     <h2>Actividad Reciente</h2>
                     <p>Aquí se mostrará la actividad reciente del sistema.</p>

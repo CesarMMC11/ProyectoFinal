@@ -33,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
     Fecha: {
       type: DataTypes.DATEONLY,
       allowNull: false
+    },
+    paymentStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'unpaid',
+      validate: {
+        isIn: [['unpaid', 'pending', 'paid']]
+      }
     }
   }, {
     sequelize,

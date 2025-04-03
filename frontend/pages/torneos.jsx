@@ -4,54 +4,68 @@ import Navbar from '../src/components/Navbar';
 import ContentWT from '../src/components/contentWT';
 import Location from '../src/components/location';
 import Footer from '../src/components/footer';
+import SectionImg from '../src/components/sectionImg';
+import PaymentModal from '../src/components/payment/paymentModal';
 
 const Torneo = () => {
     const [formData, setFormData] = useState({
         fecha: '',
         nombre: '',
-        invitado: '', // Cambiado de "invitados" a "invitado"
+        invitado: '',
         hora: '',
         telefono: '',
         email: '',
     });
-    
+   
     // Estado para las inscripciones del usuario
     const [inscripciones, setInscripciones] = useState([]);
-    
+   
     // Estado para el modo de edición
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState(null);
     
+    // Estado para controlar la carga de datos
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    // Estado para el modal de pago
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [selectedTorneo, setSelectedTorneo] = useState(null);
+   
     // Cargar las inscripciones del usuario al montar el componente
     useEffect(() => {
         fetchInscripciones();
     }, []);
-    
+   
     // Función para cargar las inscripciones del usuario
     const fetchInscripciones = async () => {
+        setLoading(true);
+        setError(null);
+        
         try {
             const token = localStorage.getItem('token');
-            
+           
             if (!token) {
                 console.log('Usuario no autenticado');
+                setLoading(false);
                 return;
             }
-            
+           
             console.log('Obteniendo inscripciones del usuario...');
-            
+           
             const response = await fetch('http://localhost:3456/torneos/user', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            
+           
             console.log('Respuesta del servidor:', response.status, response.statusText);
-            
+           
             if (response.ok) {
                 const data = await response.json();
                 console.log('Datos recibidos:', data);
-                
+               
                 // Verificar la estructura de la respuesta
                 if (Array.isArray(data)) {
                     console.log('Datos son un array, longitud:', data.length);
@@ -66,15 +80,18 @@ const Torneo = () => {
             } else {
                 const errorData = await response.json().catch(e => ({ message: 'Error al parsear respuesta' }));
                 console.error('Error al obtener inscripciones:', errorData);
+                setError(errorData.message || 'Error al obtener inscripciones');
                 setInscripciones([]);
             }
         } catch (error) {
             console.error('Error al conectar con el servidor:', error);
+            setError('Error al conectar con el servidor');
             setInscripciones([]);
+        } finally {
+            setLoading(false);
         }
     };
-    
-
+   
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -95,8 +112,8 @@ const Torneo = () => {
             }
 
             // URL y método según si estamos editando o creando
-            const url = editMode 
-                ? `http://localhost:3456/torneos/update/${editId}` 
+            const url = editMode
+                ? `http://localhost:3456/torneos/update/${editId}`
                 : 'http://localhost:3456/torneos/create';
             const method = editMode ? 'PUT' : 'POST';
 
@@ -112,11 +129,11 @@ const Torneo = () => {
             const data = await response.json();
 
             if (response.ok) {
-                const mensaje = editMode 
-                    ? 'Inscripción actualizada exitosamente' 
+                const mensaje = editMode
+                    ? 'Inscripción actualizada exitosamente'
                     : 'Inscripción creada exitosamente, bienvenido al torneo';
                 alert(mensaje);
-                
+               
                 // Limpiar formulario y resetear modo de edición
                 setFormData({
                     fecha: '',
@@ -128,7 +145,7 @@ const Torneo = () => {
                 });
                 setEditMode(false);
                 setEditId(null);
-                
+               
                 // Actualizar la lista de inscripciones
                 fetchInscripciones();
             } else {
@@ -145,26 +162,28 @@ const Torneo = () => {
         if (!window.confirm('¿Estás seguro de que deseas eliminar esta inscripción?')) {
             return;
         }
-        
+       
         try {
+            setLoading(true);
             const token = localStorage.getItem('token');
-            
+           
             if (!token) {
                 alert('Debes iniciar sesión para realizar esta acción.');
+                setLoading(false);
                 return;
             }
-            
+           
             const response = await fetch(`http://localhost:3456/torneos/delete/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            
+           
             if (response.ok) {
                 alert('Inscripción eliminada exitosamente');
                 // Actualizar la lista de inscripciones
-                setInscripciones(prevInscripciones => 
+                setInscripciones(prevInscripciones =>
                     prevInscripciones.filter(inscripcion => inscripcion.id !== id)
                 );
             } else {
@@ -174,9 +193,11 @@ const Torneo = () => {
         } catch (error) {
             console.error('Error al eliminar:', error);
             alert('Error al conectar con el servidor');
+        } finally {
+            setLoading(false);
         }
     };
-    
+   
     // Función para cargar datos en el formulario para editar
     const handleEdit = (inscripcion) => {
         setFormData({
@@ -189,14 +210,14 @@ const Torneo = () => {
         });
         setEditMode(true);
         setEditId(inscripcion.id);
-        
+       
         // Desplazar hacia el formulario
         window.scrollTo({
             top: document.querySelector('.booking-form').offsetTop,
             behavior: 'smooth'
         });
     };
-    
+   
     // Función para cancelar la edición
     const handleCancelEdit = () => {
         setFormData({
@@ -217,12 +238,45 @@ const Torneo = () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('es-ES', options);
     };
+    
+    // Mostrar el modal de pago
+    const handleShowPaymentModal = (torneo) => {
+        setSelectedTorneo(torneo);
+        setShowPaymentModal(true);
+    };
+    
+    // Cerrar el modal de pago
+    const handleClosePaymentModal = () => {
+        setShowPaymentModal(false);
+        setSelectedTorneo(null);
+    };
+    
+    // Manejar el pago completado
+    const handlePaymentComplete = () => {
+        fetchInscripciones(); // Actualizar la lista de inscripciones para reflejar el nuevo estado de pago
+    };
+    
+    // Renderizar el estado de pago
+    const renderPaymentStatus = (status) => {
+        if (!status) return <span className="payment-status unpaid">No pagado</span>;
+        
+        switch(status) {
+            case 'paid':
+                return <span className="payment-status paid">Pagado</span>;
+            case 'pending':
+                return <span className="payment-status pending">Pendiente</span>;
+            case 'unpaid':
+            default:
+                return <span className="payment-status unpaid">No pagado</span>;
+        }
+    };
 
     return (
         <>
         <Header />
         <Navbar />
-        
+        <SectionImg section="torneos" />
+
         <div className="container">
             <section className="booking-section">
                 <h1 className="booking-title">¡Aquí puedes inscribirte en nuestros Torneos Disponibles!</h1>
@@ -247,6 +301,7 @@ const Torneo = () => {
                                         className="form-control"
                                         placeholder="Selecciona fecha"
                                         required
+                                        disabled={loading}
                                     />
                                 </div>
                             </div>
@@ -261,6 +316,7 @@ const Torneo = () => {
                                     className="form-control"
                                     placeholder="Tu nombre"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                             {/* Invitado */}
@@ -274,6 +330,7 @@ const Torneo = () => {
                                     className="form-control"
                                     placeholder="Nombre del invitado"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                             {/* Hora */}
@@ -288,6 +345,7 @@ const Torneo = () => {
                                         className="form-control"
                                         placeholder="Selecciona hora"
                                         required
+                                        disabled={loading}
                                     />
                                 </div>
                             </div>
@@ -302,6 +360,7 @@ const Torneo = () => {
                                     className="form-control"
                                     placeholder="Tu número de teléfono"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                             {/* Email */}
@@ -315,20 +374,34 @@ const Torneo = () => {
                                     className="form-control"
                                     placeholder="Tu correo electrónico"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                         </div>
+                        
+                        {/* Mostrar mensaje de error si existe */}
+                        {error && (
+                            <div className="error-message">
+                                {error}
+                            </div>
+                        )}
+                        
                         {/* Botones de acción */}
                         <div className="form-actions">
-                            <button type="submit" className="submit-btn">
-                                {editMode ? 'Actualizar Inscripción' : 'Inscribirse en el torneo'}
+                            <button 
+                                type="submit" 
+                                className="submit-btn"
+                                disabled={loading}
+                            >
+                                {loading ? 'Procesando...' : (editMode ? 'Actualizar Inscripción' : 'Inscribirse en el torneo')}
                             </button>
-                            
+                           
                             {editMode && (
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     className="cancel-btn"
                                     onClick={handleCancelEdit}
+                                    disabled={loading}
                                 >
                                     Cancelar
                                 </button>
@@ -340,12 +413,22 @@ const Torneo = () => {
                     </form>
                 </div>
             </section>
-            
+           
             {/* Sección de inscripciones del usuario */}
             <section className="reservations-section">
                 <h2 className="reservations-title">Tus Inscripciones a Torneos</h2>
+               
+                {loading && <p className="loading-message">Cargando tus inscripciones...</p>}
                 
-                {inscripciones && inscripciones.length > 0 ? (
+                {error && !loading && (
+                    <p className="error-message">{error}</p>
+                )}
+                
+                {!loading && !error && inscripciones.length === 0 && (
+                    <p className="no-reservations">No tienes inscripciones a torneos activas.</p>
+                )}
+                
+                {!loading && !error && inscripciones.length > 0 && (
                     <div className="reservations-list">
                         {inscripciones.map((inscripcion) => (
                             <div key={inscripcion.id || Math.random()} className="reservation-card">
@@ -356,29 +439,52 @@ const Torneo = () => {
                                     <p><strong>Invitado:</strong> {inscripcion.invitado}</p>
                                     <p><strong>Teléfono:</strong> {inscripcion.telefono}</p>
                                     <p><strong>Email:</strong> {inscripcion.email}</p>
+                                    <p><strong>Estado de pago:</strong> {renderPaymentStatus(inscripcion.paymentStatus)}</p>
                                 </div>
                                 <div className="reservation-actions">
-                                    <button 
+                                    <button
                                         className="edit-btn"
                                         onClick={() => handleEdit(inscripcion)}
+                                        disabled={loading}
                                     >
                                         Editar
                                     </button>
-                                    <button 
+                                    <button
                                         className="delete-btn"
                                         onClick={() => handleDelete(inscripcion.id)}
+                                        disabled={loading}
                                     >
                                         Eliminar
                                     </button>
+                                    {/* Botón de pago - solo mostrar si no está pagado */}
+                                    {(inscripcion.paymentStatus === 'unpaid' || !inscripcion.paymentStatus) && (
+                                        <button
+                                            className="pay-btn"
+                                            onClick={() => handleShowPaymentModal(inscripcion)}
+                                            disabled={loading}
+                                        >
+                                            Pagar
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}
                     </div>
-                ) : (
-                    <p className="no-reservations">No tienes inscripciones a torneos activas.</p>
                 )}
             </section>
         </div>
+
+        {/* Modal de Pago */}
+        {selectedTorneo && (
+            <PaymentModal
+                show={showPaymentModal}
+                onHide={handleClosePaymentModal}
+                item={selectedTorneo}
+                itemType="torneo"
+                onPaymentComplete={handlePaymentComplete}
+            />
+        )}
+
         <ContentWT/>
         <Location />
         <Footer />
@@ -387,3 +493,4 @@ const Torneo = () => {
 };
 
 export default Torneo;
+

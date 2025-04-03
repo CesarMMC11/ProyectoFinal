@@ -55,6 +55,7 @@ nav ul {
   list-style: none;
   margin-bottom: 0;
   z-index: 1000;
+  align-items: center;
 }
 
 nav ul li {
@@ -675,7 +676,8 @@ footer {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
   border-bottom: 1px solid black;
-  width: 30%;
+  width: 40%;
+  text-align: center;
 }
 
 .form-grid {
@@ -1379,7 +1381,7 @@ footer {
     margin: 0 auto;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
     padding: 30px;
     margin-top: -50px;
     position: relative;
@@ -1526,14 +1528,14 @@ footer {
     margin: 30px auto;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
     padding: 30px;
 }
 
 .friends-section h2 {
     margin-top: 0;
     color: #333;
-    border-bottom: 2px solid #f1f1f1;
+    border-bottom: 2px solid black;
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -1572,6 +1574,7 @@ footer {
     margin: 5px 0 0;
     font-size: 0.8rem;
     color: #777;
+    padding: 15px;
 }
 
 /* Estilos responsivos */
@@ -1666,7 +1669,6 @@ footer {
 .form-title {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: left;
 }
 
 .input-group {
@@ -1853,7 +1855,6 @@ footer {
 .logout-btn {
   width: 100%;
   padding: 10px;
-  margin-top: 20px;
   background-color: #e74c3c;
   color: white;
   border: none;
@@ -1866,6 +1867,10 @@ footer {
   padding: 20px;
   background-color: #f5f5f5;
   text-align: center;
+}
+
+.admin-card{
+  gap: 10px;
 }
 
 .stats-grid {
@@ -2017,7 +2022,7 @@ footer {
 }
 
 /* Estilos para botones de acción en tablas */
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn, .pay-btn {
   padding: 8px 14px; /* Botones más grandes */
   border: none;
   border-radius: 4px;
@@ -2044,6 +2049,11 @@ footer {
 
 .delete-btn:hover {
   background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+.pay-btn:hover {
+  background-color: #28a745;
   transform: translateY(-2px);
 }
 
@@ -2109,5 +2119,814 @@ footer {
   .users-table td, .reservations-table td, .classes-table td, .tournaments-table td {
     padding: 12px 15px; /* Padding reducido en móviles */
   }
+}
+
+
+/*ESTILO PARA AMIGOS*/
+
+/* Estilos generales para la página de amigos */
+.friends-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+}
+
+.friends-page h1 {
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+/* Estilos para las pestañas */
+.friends-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab-btn {
+  padding: 1rem 2rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: #3498db;
+}
+
+.tab-btn.active {
+  color: #3498db;
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #3498db;
+}
+
+/* Contenido de las pestañas */
+.tab-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+}
+
+/* Estilos para la búsqueda de amigos */
+.friend-search {
+  margin-bottom: 2rem;
+}
+
+.search-container {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+  font-size: 1rem;
+  width: 90%;
+}
+
+.search-btn {
+  padding: 0.8rem 1.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+}
+
+.search-btn:hover {
+  background-color: #2980b9;
+}
+
+.search-results {
+  margin-top: 1.5rem;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Estilos para las tarjetas de usuario */
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.user-email {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.user-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #27ae60;
+}
+
+.btn-danger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid #3498db;
+  color: #3498db;
+}
+
+.btn-outline:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Estilos para solicitudes pendientes */
+.pending-requests {
+  margin-bottom: 2rem;
+}
+
+.pending-requests h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.request-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  border-left: 4px solid #f39c12;
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.request-time {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-top: 0.3rem;
+}
+
+/* Estilos para la lista de amigos */
+.friends-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.friend-card {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
+}
+
+.friend-card:hover {
+  transform: translateY(-5px);
+}
+
+.friend-header {
+  position: relative;
+  height: 100px;
+  background-color: #3498db;
+}
+
+.friend-avatar {
+  position: absolute;
+  bottom: -30px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 4px solid #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #3498db;
+}
+
+.friend-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-body {
+  padding: 2rem 1rem 1rem;
+  margin-top: 10px;
+}
+
+.friend-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.friend-email {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.friend-actions {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+/* Estilos para los estados de carga y error */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  text-align: center;
+  padding: 1rem;
+  background-color: #ffebee;
+  color: #e53935;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  text-align: center;
+  padding: 1rem;
+  background-color: #e8f5e9;
+  color: #43a047;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .friends-page {
+    padding: 1rem;
+  }
+  
+  .friends-tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.8rem;
+  }
+  
+  .search-container {
+    flex-direction: column;
+  }
+  
+  .search-input {
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .search-btn {
+    border-radius: 4px;
+  }
+  
+  .friends-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-actions, .request-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tab-content {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.user-card, .friend-card, .request-card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+
+/* Añade estos estilos a tu archivo friends.css */
+
+.friends-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.back-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+/* Puedes añadir un icono si lo deseas */
+.back-btn::before {
+  content: "←";
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.invite-game-btn {
+  box-sizing: .5rem;
+  padding: 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+}
+
+
+.remove-friend-btn {
+  box-sizing: .5rem;
+  padding: 10px;
+  margin: 5px 10px;
+  border-radius: 10px;
+}
+
+/*CARAGAR IMAGENES*/
+.image-manager {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.image-manager h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.current-image {
+  margin-bottom: 20px;
+}
+
+.current-image img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 4px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section {
+  margin-top: 20px;
+}
+
+.upload-section input[type="file"] {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.upload-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
+.upload-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 3rem;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.delete-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #f44336;
+  margin-top: 10px;
+}
+
+.success-message {
+  color: #4CAF50;
+  margin-top: 10px;
+}
+
+
+
+/*IMAGENES PARA USUARIOS*/
+.section-image-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.section-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-image-loading {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.section-image-error {
+  text-align: center;
+  padding: 20px;
+  color: #f44336;
+}
+
+
+/*PAYMENT MODAL*/
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.payment-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.payment-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.payment-modal-body {
+  padding: 20px;
+}
+
+.payment-details {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.payment-details h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.payment-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.payment-tab {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.payment-tab.active {
+  border-bottom: 2px solid #007bff;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.club-info {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.8);
+
+}
+
+.club-info h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: #6c757d;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.submit-payment-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+.submit-payment-btn:hover {
+  background-color: #218838;
+}
+
+.submit-payment-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.paypal-payment {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.5);
+
+}
+
+/*BOTON DE PAGO Y ESTILO*/
+
+/* Estilos para el estado de pago */
+.payment-status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.payment-status.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.payment-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.payment-status.unpaid {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Estilos para el botón de pago */
+.pay-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-top: 8px;
+  margin-left: 10px;
+}
+
+.pay-btn:hover {
+  background-color: #218838;
+}
+
+.pay-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 

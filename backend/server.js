@@ -5,6 +5,9 @@ const multer = require('multer');
 const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
+const cron = require('node-cron'); // Importar node-cron
+const { Reserva, Torneo, Clase } = require('./models'); // Importar los modelos
+const { Op } = require('sequelize'); // Importar operadores de Sequelize
 
 // Cargar variables de entorno
 dotenv.config();
@@ -46,6 +49,48 @@ app.use(cors({
     credentials: true,
 }));
 
+// Configurar tarea programada para eliminar reservas vencidas
+// Se ejecutará todos los días a la medianoche (00:00)
+cron.schedule('0 0 * * *', async () => {
+    console.log('Ejecutando limpieza de reservas vencidas...');
+    
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    
+    try {
+        // Eliminar reservas vencidas
+        const reservasEliminadas = await Reserva.destroy({
+            where: {
+                fecha: {
+                    [Op.lt]: hoy
+                }
+            }
+        });
+        
+        // Eliminar inscripciones a torneos vencidos
+        const torneosEliminados = await Torneo.destroy({
+            where: {
+                fecha: {
+                    [Op.lt]: hoy
+                }
+            }
+        });
+        
+        // Eliminar inscripciones a clases vencidas
+        const clasesEliminadas = await Clase.destroy({
+            where: {
+                Fecha: {
+                    [Op.lt]: hoy
+                }
+            }
+        });
+        
+        console.log(`Limpieza completada: ${reservasEliminadas} reservas, ${torneosEliminados} torneos y ${clasesEliminadas} clases eliminadas.`);
+    } catch (error) {
+        console.error('Error al limpiar reservas vencidas:', error);
+    }
+});
+
 // Rutas
 app.use('/api', require('./routes/userRoutes'));
 app.use('/reservas', require('./routes/reservaRoutes'));
@@ -55,6 +100,12 @@ app.use('/clases', require('./routes/clasesRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
 // Ruta para el perfil de usuario
 app.use('/user', require('./routes/userRoutes'));
+//ruta de amigos
+app.use('/amigos', require('./routes/friendsRoutes'));
+//ruta para cargar imagenes
+app.use('/images', require('./routes/imagenRoutes'));
+//ruta para pagos
+app.use('/payments', require('./routes/paymentRoutes'));
 
 // Iniciar servidor
 app.listen(port, () => {

@@ -2,6 +2,8 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'llave secreta'
+const emailServices = require('../utils/emailServices')
+const { Op } = require('sequelize');
 
 //COnfiguracion de JWT
 
@@ -27,6 +29,10 @@ const userController = {
                 email, 
                 password: hashedPassword
             });
+
+            await emailServices.sendWelcomeEmail(email, name);
+
+
             response.status(201).json({ message: 'Usuario registrado con Exito'})
         } catch (error) {
             console.log('Error al registrar el usuario', error);
@@ -83,7 +89,7 @@ const userController = {
 
     changePassword: async (request, response) => {
         try {
-            const { id } = request.params;
+            const userID = request.user.userID;
             const { oldPassword, newPassword } = request.body;
 
             //Verificar si el usuario existe
@@ -112,6 +118,90 @@ const userController = {
         }
     },
 
+    forgotPassword: async (req, res) => {
+        try {
+        const { email } = req.body;
+        
+        // Verificar si el usuario existe
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+        // Por seguridad, no revelamos si el email existe o no
+        return res.status(200).json({ 
+            message: 'Si el correo está registrado, recibirás un enlace para restablecer tu contraseña' 
+        });
+        }
+        
+        // Generar token único
+        const resetToken = jwt.sign({ 
+        userId: user.id 
+        }, SECRET_KEY, { expiresIn: '1h' });
+        
+        // Guardar el token en la base de datos
+        await user.update({
+        resetToken: resetToken,
+        resetTokenExpiry: Date.now() + 3600000 // 1 hora en milisegundos
+        });
+        
+        // Enviar email con el token
+        await emailServices.sendPasswordResetEmail(user.email, user.name, resetToken);
+        
+        res.status(200).json({ 
+        message: 'Si el correo está registrado, recibirás un enlace para restablecer tu contraseña' 
+        });
+    } catch (error) {
+        console.error('Error al solicitar restablecimiento de contraseña:', error);
+        res.status(500).json({ 
+        message: 'Error al procesar la solicitud', 
+        error: error.message 
+        });
+    }
+    },
+    
+    resetPassword: async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        
+        // Verificar que el token sea válido
+        let decoded;
+        try {
+        decoded = jwt.verify(token, SECRET_KEY);
+        } catch (error) {
+        return res.status(400).json({ message: 'El enlace ha expirado o no es válido' });
+        }
+        
+        // Buscar al usuario por el ID en el token
+        const user = await User.findOne({ 
+        where: { 
+            id: decoded.userId,
+            resetToken: token,
+            resetTokenExpiry: { [Op.gt]: Date.now() } // Verifica que el token no haya expirado
+        } 
+        });
+        
+        if (!user) {
+        return res.status(400).json({ message: 'El enlace ha expirado o no es válido' });
+        }
+        
+        // Hashear la nueva contraseña
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        
+        // Actualizar la contraseña y limpiar el token de restablecimiento
+        await user.update({
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null
+        });
+        
+        res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+    } catch (error) {
+        console.error('Error al restablecer contraseña:', error);
+        res.status(500).json({ 
+        message: 'Error al restablecer la contraseña', 
+        error: error.message 
+        });
+    }
+    },
+    
 
     updateProfile: async (request, response) => {
         try {

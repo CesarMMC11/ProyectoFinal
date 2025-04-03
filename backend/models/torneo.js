@@ -20,7 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     invitado: DataTypes.STRING,
     hora: DataTypes.TIME,
     telefono: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    paymentStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'unpaid',
+      validate: {
+        isIn: [['unpaid', 'pending', 'paid']]
+      }
+    }
   }, {
     sequelize,
     modelName: 'Torneo',
