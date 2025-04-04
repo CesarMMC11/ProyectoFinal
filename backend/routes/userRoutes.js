@@ -30,6 +30,8 @@ const upload = multer({
 // Rutas existentes
 router.post('/register', userController.Register);
 router.post('/login', userController.Login);
+router.post('/forgot-password', userController.forgotPassword);
+router.post('/reset-password', userController.resetPassword);
 router.put('/change-password', authMiddleware, userController.changePassword);
 router.post('/logout', userController.logout);
 

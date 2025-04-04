@@ -8,37 +8,37 @@ const ContentWR = () => {
         <section className="content-WR">
             {/* Tournaments Card */}
             <div className="tournament-card">
-                <h2>TORNEOS DISPONIBLES</h2>
+            <h2>PROXIMOS TORNEOS </h2>
 
-                <div className="tournament-item">
-                    <div className="tournament-icon">
-                        <i className="fas fa-triangle-exclamation"></i>
-                    </div>
-                    <div className="tournament-info">
-                        <h3>PREMIER PADEL</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero.</p>
-                    </div>
-                </div>
+<div className="tournament-item">
+    <div className="tournament-icon">
+        <i className="fas fa-triangle-exclamation"></i>
+    </div>
+    <div className="tournament-info">
+        <h3>GRAN TORNEO INAUGURACION</h3>
+        <p>Torneo para celebrar la apertura del club.</p>
+    </div>
+</div>
 
-                <div className="tournament-item">
-                    <div className="tournament-icon">
-                        <i className="fas fa-triangle-exclamation"></i>
-                    </div>
-                    <div className="tournament-info">
-                        <h3>WORLD PADEL TOUR</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero.</p>
-                    </div>
-                </div>
+<div className="tournament-item">
+    <div className="tournament-icon">
+        <i className="fas fa-triangle-exclamation"></i>
+    </div>
+    <div className="tournament-info">
+        <h3>TORNEO TIPO AMERICANO</h3>
+        <p>Torneo donde vas a poder mostrar tu habilidades, es un torneo Suma 9.</p>
+    </div>
+</div>
 
-                <div className="tournament-item">
-                    <div className="tournament-icon">
-                        <i className="fas fa-triangle-exclamation"></i>
-                    </div>
-                    <div className="tournament-info">
-                        <h3>GRAN TORNEO INAUGURACIÓN</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae elit libero.</p>
-                    </div>
-                </div>
+<div className="tournament-item">
+    <div className="tournament-icon">
+        <i className="fas fa-triangle-exclamation"></i>
+    </div>
+    <div className="tournament-info">
+        <h3>TORNEO FEMENINO</h3>
+        <p>Un torneo exclusivo para chicas, ven con tus amigas y disfruta de una tarde de Padel, fecha por confirmarse.</p>
+    </div>
+</div>
             </div>
 
             {/* Classes Card */}

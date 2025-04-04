@@ -19,6 +19,10 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.13.0",
+<<<<<<< HEAD
+=======
+    "node-cron": "^3.0.3",
+>>>>>>> 220c9fd49c91742589d88d959f82880496587db5
     "nodemailer": "^6.10.0",
     "sequelize": "^6.37.6",
     "sequelize-cli": "^6.6.2"

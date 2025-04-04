@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import AdminSidebar from '../../src/components/adminComponents.jsx/adminSidebar';
 import AdminHeader from '../../src/components/adminComponents.jsx/adminHeader';
+import ImageManager from '../../src/components/adminComponents.jsx/imageMaganer';
 
 const AdminReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+   
     useEffect(() => {
         fetchReservations();
     }, []);
@@ -71,10 +72,13 @@ const AdminReservations = () => {
             <AdminSidebar />
             <div className="admin-content">
                 <AdminHeader title="Gestión de Reservaciones" />
-                
+            
+                {/* Componente para gestionar la imagen de la sección */}
+                <ImageManager section="reservas" />
+
                 <div className="admin-card">
                     <h2>Todas las Reservaciones</h2>
-                    
+                
                     {loading ? (
                         <p>Cargando reservaciones...</p>
                     ) : error ? (
@@ -102,8 +106,8 @@ const AdminReservations = () => {
                                         <td>{reservation.telefono}</td>
                                         <td>{reservation.email}</td>
                                         <td>
-                                            <button 
-                                                className="delete-btn" 
+                                            <button
+                                                className="delete-btn"
                                                 onClick={() => handleDelete(reservation.id)}
                                             >
                                                 Eliminar

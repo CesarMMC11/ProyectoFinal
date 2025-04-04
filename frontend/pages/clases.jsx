@@ -4,6 +4,8 @@ import Navbar from '../src/components/Navbar';
 import ContentWC from '../src/components/contentWC';
 import Location from '../src/components/location';
 import Footer from '../src/components/footer';
+import SectionImg from '../src/components/sectionImg';
+import PaymentModal from '../src/components/payment/paymentModal';
 
 const Clases = () => {
     // Estado para el formulario
@@ -13,39 +15,43 @@ const Clases = () => {
         Telefono: '',
         Fecha: ''
     });
-    
+   
     // Estado para las inscripciones del usuario
     const [inscripciones, setInscripciones] = useState([]);
-    
+   
     // Estado para el modo de edición
     const [editMode, setEditMode] = useState(false);
     const [editId, setEditId] = useState(null);
-    
+   
     // Estado para controlar la carga de datos
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
+    // Estado para el modal de pago
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [selectedClase, setSelectedClase] = useState(null);
+   
     // Cargar las inscripciones del usuario al montar el componente
     useEffect(() => {
         fetchInscripciones();
     }, []);
-    
+   
     // Función para cargar las inscripciones del usuario
     const fetchInscripciones = async () => {
         setLoading(true);
         setError(null);
-        
+       
         try {
             const token = localStorage.getItem('token');
-            
+           
             if (!token) {
                 console.log('Usuario no autenticado');
                 setLoading(false);
                 return;
             }
-            
+           
             console.log('Obteniendo inscripciones a clases...');
-            
+           
             const response = await fetch('http://localhost:3456/clases/user', {
                 method: 'GET',
                 headers: {
@@ -53,13 +59,13 @@ const Clases = () => {
                     'Content-Type': 'application/json'
                 },
             });
-            
+           
             console.log('Respuesta del servidor:', response.status, response.statusText);
-            
+           
             if (response.ok) {
                 const data = await response.json();
                 console.log('Datos recibidos:', JSON.stringify(data));
-                
+               
                 // Si data es un array, úsalo directamente
                 if (Array.isArray(data)) {
                     console.log('Datos son un array, longitud:', data.length);
@@ -112,8 +118,8 @@ const Clases = () => {
             }
    
             // URL y método según si estamos editando o creando
-            const url = editMode 
-                ? `http://localhost:3456/clases/${editId}` 
+            const url = editMode
+                ? `http://localhost:3456/clases/${editId}`
                 : 'http://localhost:3456/clases/create';
             const method = editMode ? 'PUT' : 'POST';
 
@@ -125,19 +131,19 @@ const Clases = () => {
                 },
                 body: JSON.stringify(formData),
             });
-            
+           
             // Verificar el tipo de contenido antes de intentar analizar como JSON
             const contentType = response.headers.get("content-type");
-            
+           
             if (contentType && contentType.indexOf("application/json") !== -1) {
                 const data = await response.json();
-                
+               
                 if (response.ok) {
-                    const mensaje = editMode 
-                        ? 'Inscripción actualizada exitosamente' 
+                    const mensaje = editMode
+                        ? 'Inscripción actualizada exitosamente'
                         : 'Inscripción creada exitosamente, bienvenido a la clase';
                     alert(mensaje);
-                    
+                   
                     // Limpiar formulario y resetear modo de edición
                     setFormData({
                         Nombre: '',
@@ -147,7 +153,7 @@ const Clases = () => {
                     });
                     setEditMode(false);
                     setEditId(null);
-                    
+                   
                     // Actualizar la lista de inscripciones
                     fetchInscripciones();
                 } else {
@@ -164,33 +170,35 @@ const Clases = () => {
             alert('Error al conectar con el servidor: ' + error.message);
         }
     };
-    
+   
     // Función para eliminar una inscripción
     const handleDelete = async (id) => {
         if (!window.confirm('¿Estás seguro de que deseas eliminar esta inscripción?')) {
             return;
         }
-        
+       
         try {
+            setLoading(true);
             const token = localStorage.getItem('token');
-            
+           
             if (!token) {
                 alert('Debes iniciar sesión para realizar esta acción.');
+                setLoading(false);
                 return;
             }
-            
+           
             const response = await fetch(`http://localhost:3456/clases/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            
+           
             if (response.ok) {
                 alert('Inscripción eliminada exitosamente');
                 // Actualizar la lista de inscripciones
-                setInscripciones(prevInscripciones => 
-                    prevInscripciones.filter(inscripcion => 
+                setInscripciones(prevInscripciones =>
+                    prevInscripciones.filter(inscripcion =>
                         (inscripcion.id || inscripcion._id) !== id
                     )
                 );
@@ -201,9 +209,11 @@ const Clases = () => {
         } catch (error) {
             console.error('Error al eliminar:', error);
             alert('Error al conectar con el servidor');
+        } finally {
+            setLoading(false);
         }
     };
-    
+   
     // Función para cargar datos en el formulario para editar
     const handleEdit = (inscripcion) => {
         setFormData({
@@ -214,14 +224,14 @@ const Clases = () => {
         });
         setEditMode(true);
         setEditId(inscripcion.id || inscripcion._id);
-        
+       
         // Desplazar hacia el formulario
         window.scrollTo({
             top: document.querySelector('.booking-form').offsetTop,
             behavior: 'smooth'
         });
     };
-    
+   
     // Función para cancelar la edición
     const handleCancelEdit = () => {
         setFormData({
@@ -240,11 +250,44 @@ const Clases = () => {
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(dateString).toLocaleDateString('es-ES', options);
     };
+    
+    // Mostrar el modal de pago
+    const handleShowPaymentModal = (clase) => {
+        setSelectedClase(clase);
+        setShowPaymentModal(true);
+    };
+    
+    // Cerrar el modal de pago
+    const handleClosePaymentModal = () => {
+        setShowPaymentModal(false);
+        setSelectedClase(null);
+    };
+    
+    // Manejar el pago completado
+    const handlePaymentComplete = () => {
+        fetchInscripciones(); // Actualizar la lista de inscripciones para reflejar el nuevo estado de pago
+    };
+    
+    // Renderizar el estado de pago
+    const renderPaymentStatus = (status) => {
+        if (!status) return <span className="payment-status unpaid">No pagado</span>;
+        
+        switch(status) {
+            case 'paid':
+                return <span className="payment-status paid">Pagado</span>;
+            case 'pending':
+                return <span className="payment-status pending">Pendiente</span>;
+            case 'unpaid':
+            default:
+                return <span className="payment-status unpaid">No pagado</span>;
+        }
+    };
 
     return (
         <>
         <Header/>
         <Navbar/>
+        <SectionImg section="clases" />
 
         <div className="container">
             <section className="booking-section">
@@ -269,6 +312,7 @@ const Clases = () => {
                                     className="form-control"
                                     placeholder="Tu nombre"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                             {/* Hora */}
@@ -283,6 +327,7 @@ const Clases = () => {
                                         className="form-control"
                                         placeholder="Selecciona hora"
                                         required
+                                        disabled={loading}
                                     />
                                 </div>
                             </div>
@@ -297,6 +342,7 @@ const Clases = () => {
                                     className="form-control"
                                     placeholder="Tu número de teléfono"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                             {/* Fecha */}
@@ -310,20 +356,34 @@ const Clases = () => {
                                     className="form-control"
                                     placeholder="Selecciona la fecha"
                                     required
+                                    disabled={loading}
                                 />
                             </div>
                         </div>
+                        
+                        {/* Mostrar mensaje de error si existe */}
+                        {error && (
+                            <div className="error-message">
+                                {error}
+                            </div>
+                        )}
+                        
                         {/* Botones de acción */}
                         <div className="form-actions">
-                            <button type="submit" className="submit-btn">
-                                {editMode ? 'Actualizar Inscripción' : 'Inscribirse'}
+                            <button 
+                                type="submit" 
+                                className="submit-btn"
+                                disabled={loading}
+                            >
+                                {loading ? 'Procesando...' : (editMode ? 'Actualizar Inscripción' : 'Inscribirse')}
                             </button>
-                            
+                           
                             {editMode && (
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     className="cancel-btn"
                                     onClick={handleCancelEdit}
+                                    disabled={loading}
                                 >
                                     Cancelar
                                 </button>
@@ -335,11 +395,11 @@ const Clases = () => {
                     </form>
                 </div>
             </section>
-            
+           
             {/* Sección de inscripciones del usuario */}
             <section className="reservations-section">
                 <h2 className="reservations-title">Mis Clases</h2>
-                
+               
                 {loading ? (
                     <p className="loading-message">Cargando tus clases...</p>
                 ) : error ? (
@@ -353,20 +413,33 @@ const Clases = () => {
                                     <p><strong>Fecha:</strong> {formatDate(inscripcion.Fecha)}</p>
                                     <p><strong>Hora:</strong> {inscripcion.Hora || 'No especificada'}</p>
                                     <p><strong>Teléfono:</strong> {inscripcion.Telefono || 'No especificado'}</p>
+                                    <p><strong>Estado de pago:</strong> {renderPaymentStatus(inscripcion.paymentStatus)}</p>
                                 </div>
                                 <div className="reservation-actions">
-                                    <button 
+                                    <button
                                         className="edit-btn"
                                         onClick={() => handleEdit(inscripcion)}
+                                        disabled={loading}
                                     >
                                         Editar
                                     </button>
-                                    <button 
+                                    <button
                                         className="delete-btn"
                                         onClick={() => handleDelete(inscripcion.id || inscripcion._id)}
+                                        disabled={loading}
                                     >
                                         Eliminar
                                     </button>
+                                    {/* Botón de pago - solo mostrar si no está pagado */}
+                                    {(inscripcion.paymentStatus === 'unpaid' || !inscripcion.paymentStatus) && (
+                                        <button
+                                            className="pay-btn"
+                                            onClick={() => handleShowPaymentModal(inscripcion)}
+                                            disabled={loading}
+                                        >
+                                            Pagar
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -376,6 +449,17 @@ const Clases = () => {
                 )}
             </section>
         </div>
+
+        {/* Modal de Pago */}
+        {selectedClase && (
+            <PaymentModal
+                show={showPaymentModal}
+                onHide={handleClosePaymentModal}
+                item={selectedClase}
+                itemType="clase"
+                onPaymentComplete={handlePaymentComplete}
+            />
+        )}
 
         <ContentWC/>
         <Location/>

@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../src/components/header';
 import Footer from '../src/components/footer';
 
-const API_URL = 'http://localhost:3456';
-
 const Perfil = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -15,10 +13,14 @@ const Perfil = () => {
         descripcion: ''
     });
     const [notification, setNotification] = useState({ show: false, type: '', message: '' });
-    
+   
     // Estados para las imágenes
     const [profileImage, setProfileImage] = useState("");
     const [coverImage, setCoverImage] = useState("");
+   
+    // Estado para los amigos
+    const [friends, setFriends] = useState([]);
+    const [loadingFriends, setLoadingFriends] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -26,14 +28,15 @@ const Perfil = () => {
             navigate('/login');
             return;
         }
-        
+       
         fetchUserData();
+        fetchFriends(); // Cargar los amigos al montar el componente
     }, [navigate]);
 
     const fetchUserData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/user/profile`, {
+            const response = await fetch(`http://localhost:3456/user/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -49,20 +52,46 @@ const Perfil = () => {
                 nombre: data.nombre || '',
                 descripcion: data.descripcion || ''
             });
-            
+           
             // Establecer las imágenes si existen
             if (data.fotoPerfil) {
-                setProfileImage(`${API_URL}${data.fotoPerfil}`);
+                setProfileImage(`http://localhost:3456${data.fotoPerfil}`);
             }
             if (data.fotoPortada) {
-                setCoverImage(`${API_URL}${data.fotoPortada}`);
+                setCoverImage(`http://localhost:3456${data.fotoPortada}`);
             }
-            
+           
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
             showNotification('error', error.message);
             setLoading(false);
+        }
+    };
+
+    // Función para obtener la lista de amigos
+    const fetchFriends = async () => {
+        try {
+            setLoadingFriends(true);
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:3456/amigos`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al cargar amigos');
+            }
+
+            const data = await response.json();
+            setFriends(data);
+        } catch (error) {
+            console.error('Error al cargar amigos:', error);
+            showNotification('error', 'No se pudieron cargar los amigos');
+        } finally {
+            setLoadingFriends(false);
         }
     };
 
@@ -94,7 +123,7 @@ const Perfil = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/user/profile/update`, {
+            const response = await fetch(`http://localhost:3456/user/profile/update`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +142,7 @@ const Perfil = () => {
                 nombre: data.user.name,
                 descripcion: data.user.description
             });
-            
+           
             setEditMode(false);
             showNotification('success', 'Perfil actualizado con éxito');
         } catch (error) {
@@ -137,7 +166,7 @@ const Perfil = () => {
             formData.append('fotoPerfil', file);
 
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/user/profile/upload-profile-image`, {
+            const response = await fetch(`http://localhost:3456/user/profile/upload-profile-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -151,7 +180,7 @@ const Perfil = () => {
 
             const data = await response.json();
             // Actualizar la imagen con la URL del servidor
-            setProfileImage(`${API_URL}${data.profileImg}`);
+            setProfileImage(`http://localhost:3456${data.profileImg}`);
             showNotification('success', 'Imagen de perfil actualizada con éxito');
         } catch (error) {
             console.error('Error:', error);
@@ -174,7 +203,7 @@ const Perfil = () => {
             formData.append('fotoPortada', file);
 
             const token = localStorage.getItem('token');
-            const response = await fetch(`${API_URL}/user/profile/upload-cover-image`, {
+            const response = await fetch(`http://localhost:3456/user/profile/upload-cover-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -188,7 +217,7 @@ const Perfil = () => {
 
             const data = await response.json();
             // Actualizar la imagen con la URL del servidor
-            setCoverImage(`${API_URL}${data.coverImg}`);
+            setCoverImage(`http://localhost:3456${data.coverImg}`);
             showNotification('success', 'Imagen de portada actualizada con éxito');
         } catch (error) {
             console.error('Error:', error);
@@ -201,6 +230,77 @@ const Perfil = () => {
         setTimeout(() => {
             setNotification({ show: false, type: '', message: '' });
         }, 3000);
+    };
+
+    // Renderizar la sección de amigos - MODIFICADO
+    const renderFriendsSection = () => {
+        if (loadingFriends) {
+            return (
+                <div className="friends-content">
+                    <p className="loading-friends">Cargando amigos...</p>
+                    <div className="friends-actions">
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => navigate('/amigos')}
+                        >
+                            Buscar amigos
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="friends-content">
+                <div className="friends-actions">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => navigate('/amigos')}
+                    >
+                        Buscar amigos
+                    </button>
+                </div>
+                
+                {friends.length === 0 ? (
+                    <div className="no-friends">
+                        <p>No tienes amigos agregados aún</p>
+                    </div>
+                ) : (
+                    <div className="friends-list">
+                        {/* Mostrar máximo 5 amigos en el perfil */}
+                        {friends.slice(0, 5).map(friend => (
+                            <div className="friend" key={friend.id}>
+                                <div className="friend-image">
+                                    {friend.profileImg ? (
+                                        <img
+                                            src={`http://localhost:3456${friend.profileImg}`}
+                                            alt={`${friend.name}`}
+                                        />
+                                    ) : (
+                                        <div className="default-friend-image">
+                                            {friend.name ? friend.name.charAt(0).toUpperCase() : 'U'}
+                                        </div>
+                                    )}
+                                </div>
+                                <h3 className="friend-name">{friend.name} {friend.lastname}</h3>
+                                <p className="friend-info">{friend.email}</p>
+                            </div>
+                        ))}
+                        
+                        {friends.length > 5 && (
+                            <div className="view-all-friends">
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => navigate('/amigos')}
+                                >
+                                    Ver todos los amigos ({friends.length})
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
     };
 
     if (loading) {
@@ -317,56 +417,7 @@ const Perfil = () => {
 
                 <div className="friends-section">
                     <h2>Amigos</h2>
-                    <div className="friend">
-                        <div className="friend-image">
-                            <img
-                                src="https://th.bing.com/th/id/OIP.Da-2nXCspeED9IX088xebwHaLH?rs=1&pid=ImgDetMain"
-                                alt="Amigo 1"
-                            />
-                        </div>
-                        <h3 className="friend-name">Gabriel</h3>
-                        <p className="friend-info">24 años</p>
-                    </div>
-                    <div className="friend">
-                        <div className="friend-image">
-                            <img
-                                src="https://th.bing.com/th/id/OIP.sqOuFeRJDikdLOuUQ9lpnAHaEN?rs=1&pid=ImgDetMain"
-                                alt="Amigo 2"
-                            />
-                        </div>
-                        <h3 className="friend-name">Sebastian</h3>
-                        <p className="friend-info">22 años</p>
-                    </div>
-                    <div className="friend">
-                        <div className="friend-image">
-                            <img
-                                src="https://img.redbull.com/images/c_crop,x_1453,y_0,h_3648,w_2189/c_fill,w_400,h_660/q_auto:low,f_auto/redbullcom/2022/2/15/gdfrqqnnslpv2bqbkco1/ale-galan-action-portrait"
-                                alt="Amigo 3"
-                            />
-                        </div>
-                        <h3 className="friend-name">Carlos</h3>
-                        <p className="friend-info">27 años</p>
-                    </div>
-                    <div className="friend">
-                        <div className="friend-image">
-                            <img
-                                src="https://th.bing.com/th/id/OIP.z9Fdd3EegvBNeywXJQO-9gHaLG?rs=1&pid=ImgDetMain"
-                                alt="Amigo 4"
-                            />
-                        </div>
-                        <h3 className="friend-name">Jose</h3>
-                        <p className="friend-info">28 años</p>
-                    </div>
-                    <div className="friend">
-                        <div className="friend-image">
-                            <img
-                                src="https://www.elneverazo.com/wp-content/uploads/2024/04/5-apr_delfi-brea.jpeg"
-                                alt="Amigo 5"
-                            />
-                        </div>
-                        <h3 className="friend-name">Alicia</h3>
-                        <p className="friend-info">25 años</p>
-                    </div>
+                    {renderFriendsSection()}
                 </div>
             </section>
             <Footer />

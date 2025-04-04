@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminSidebar from '../../src/components/adminComponents.jsx/adminSidebar';
 import AdminHeader from '../../src/components/adminComponents.jsx/adminHeader';
+import ImageManager from '../../src/components/adminComponents.jsx/imageMaganer';
+
 
 const AdminTournaments = () => {
     const [tournaments, setTournaments] = useState([]);
@@ -40,7 +42,7 @@ const AdminTournaments = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/api/admin/torneos/${tournamentId}`, {
+            const response = await fetch(`http://localhost:3456/admin/torneos/${tournamentId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -71,6 +73,9 @@ const AdminTournaments = () => {
             <AdminSidebar />
             <div className="admin-content">
                 <AdminHeader title="Gestión de Torneos" />
+
+                <ImageManager section="torneo" />
+
                 
                 <div className="admin-card">
                     <h2>Todas las Inscripciones a Torneos</h2>

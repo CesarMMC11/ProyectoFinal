@@ -1,7 +1,9 @@
 'use strict';
+
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Reserva extends Model {
     /**
@@ -10,9 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Reserva.belongsTo(models.User, {foreignKey: 'userID',as: 'user'})
+      Reserva.belongsTo(models.User, {foreignKey: 'userID', as: 'user'})
     }
   }
+  
   Reserva.init({
     userID: {
       type: DataTypes.INTEGER,
@@ -26,10 +29,19 @@ module.exports = (sequelize, DataTypes) => {
     apellido: DataTypes.STRING,
     hora: DataTypes.TIME,
     telefono: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    paymentStatus: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'unpaid',
+      validate: {
+        isIn: [['unpaid', 'pending', 'paid']]
+      }
+    }
   }, {
     sequelize,
     modelName: 'Reserva',
   });
+  
   return Reserva;
 };

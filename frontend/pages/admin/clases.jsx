@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import AdminSidebar from '../../src/components/adminComponents.jsx/adminSidebar';
 import AdminHeader from '../../src/components/adminComponents.jsx/adminHeader';
+import ImageManager from '../../src/components/adminComponents.jsx/imageMaganer';
+
 
 
 const AdminClasses = () => {
@@ -73,6 +75,8 @@ const AdminClasses = () => {
             <div className="admin-content">
                 <AdminHeader title="Gestión de Clases" />
                 
+                <ImageManager section="clases" />
+
                 <div className="admin-card">
                     <h2>Todas las Inscripciones a Clases</h2>
                     

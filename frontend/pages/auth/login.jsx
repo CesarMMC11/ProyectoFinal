@@ -95,7 +95,7 @@ const Login = ({ setIsAuthenticated }) => {
                             <div className="forgot-password">
                                 <a href="/registro"> ¿Aún no tienes cuenta? Regístrate aquí! </a>
                                 <br />
-                                <a href="#">¿Olvidaste la Contraseña? Recupérala </a>
+                                <a href="/forgot-password">¿Olvidaste la Contraseña? Recupérala </a>
                             </div>
                         </form>
                     </div>

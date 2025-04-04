@@ -7,8 +7,11 @@ import Reservaciones from '../pages/reservaciones';
 import Torneo from '../pages/torneos';
 import Clases from '../pages/clases';
 import Perfil from '../pages/perfil';
+import Amigos from '../pages/amigos';
 import Login from '../pages/auth/login';
 import Registro from '../pages/auth/register';
+import ResetPassword from '../pages/auth/resetPassword';
+import ForgotPassword from '../pages/auth/forgotPassword';
 
 // Páginas de administrador
 import AdminDashboard from '../pages/admin/adminDashboard';
@@ -52,6 +55,9 @@ const App = () => {
                 {/* Rutas Públicas */}
                 <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
                 <Route path="/registro" element={<Registro />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+
 
                 {/* Rutas Protegidas para usuarios regulares */}
                 <Route path="/" element={<ProtectedRoute element={<Home />} />} />
@@ -59,6 +65,8 @@ const App = () => {
                 <Route path="/torneos" element={<ProtectedRoute element={<Torneo />} />} />
                 <Route path="/clases" element={<ProtectedRoute element={<Clases />} />} />
                 <Route path="/perfil" element={<ProtectedRoute element={<Perfil />} />} />
+                <Route path="/amigos" element={<ProtectedRoute element={<Amigos />} />} /> 
+
 
                 {/* Rutas Protegidas para administradores */}
                 <Route 

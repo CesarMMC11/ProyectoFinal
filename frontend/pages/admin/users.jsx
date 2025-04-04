@@ -49,7 +49,7 @@ const AdminUsers = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/api/admin/users/${userId}`, {
+            const response = await fetch(`http://localhost:3456/admin/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
