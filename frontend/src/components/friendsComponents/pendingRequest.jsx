@@ -50,7 +50,7 @@ try {
 
     if (response.ok) {
     // Eliminar la solicitud aceptada de la lista
-    setPendingRequests(prevRequests => 
+    setPendingRequests(prevRequests =>
         prevRequests.filter(request => request.id !== requestId)
     );
     } else {
@@ -77,7 +77,7 @@ try {
 
     if (response.ok) {
     // Eliminar la solicitud rechazada de la lista
-    setPendingRequests(prevRequests => 
+    setPendingRequests(prevRequests =>
         prevRequests.filter(request => request.id !== requestId)
     );
     } else {
@@ -111,13 +111,13 @@ return (
             </p>
             </div>
             <div className="request-actions">
-            <button 
+            <button
                 className="accept-btn"
                 onClick={() => handleAcceptRequest(request.id)}
             >
                 Aceptar
             </button>
-            <button 
+            <button
                 className="reject-btn"
                 onClick={() => handleRejectRequest(request.id)}
             >

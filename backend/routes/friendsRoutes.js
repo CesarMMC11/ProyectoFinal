@@ -24,6 +24,7 @@ router.get('/', friendshipController.getFriends);
 // Obtener solicitudes pendientes
 router.get('/pending', friendshipController.getPendingRequests);
 
+
 // Buscar usuarios para añadir como amigos
 router.get('/search', friendshipController.searchUsers);
 

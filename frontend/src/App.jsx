@@ -12,6 +12,7 @@ import Login from '../pages/auth/login';
 import Registro from '../pages/auth/register';
 import ResetPassword from '../pages/auth/resetPassword';
 import ForgotPassword from '../pages/auth/forgotPassword';
+import PendingRequests from '../src/components/friendsComponents/pendingRequest';
 
 // Páginas de administrador
 import AdminDashboard from '../pages/admin/adminDashboard';
@@ -19,6 +20,7 @@ import AdminUsers from '../pages/admin/users';
 import AdminReservations from '../pages/admin/reservas';
 import AdminClasses from '../pages/admin/clases';
 import AdminTournaments from '../pages/admin/torneo';
+import PaymentManagement from '../pages/admin/pagos'
 
 // Componente de protección para rutas de administrador
 import AdminRoute from './components/adminRouth';
@@ -66,6 +68,8 @@ const App = () => {
                 <Route path="/clases" element={<ProtectedRoute element={<Clases />} />} />
                 <Route path="/perfil" element={<ProtectedRoute element={<Perfil />} />} />
                 <Route path="/amigos" element={<ProtectedRoute element={<Amigos />} />} /> 
+                <Route path="/solicitudes-pendientes" element={<PendingRequests />} />
+
 
 
                 {/* Rutas Protegidas para administradores */}
@@ -106,6 +110,15 @@ const App = () => {
                     element={
                         <AdminRoute>
                             <AdminTournaments />
+                        </AdminRoute>
+                    } 
+                />
+
+<Route 
+                    path="/admin/payments" 
+                    element={
+                        <AdminRoute>
+                            <PaymentManagement />
                         </AdminRoute>
                     } 
                 />

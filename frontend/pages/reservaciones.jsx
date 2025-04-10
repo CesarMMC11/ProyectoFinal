@@ -505,12 +505,12 @@ return (
                         {reservaciones.map((reservacion) => (
                             <div key={reservacion.id || Math.random()} className="reservation-card">
                                 <div className="reservation-details">
-                                    <h3>{reservacion.nombre} {reservacion.apellido}</h3>
-                                    <p><strong>Fecha:</strong> {formatDate(reservacion.fecha)}</p>
-                                    <p><strong>Hora:</strong> {reservacion.hora}</p>
-                                    <p><strong>Teléfono:</strong> {reservacion.telefono}</p>
-                                    <p><strong>Email:</strong> {reservacion.email}</p>
-                                    <p><strong>Estado de pago:</strong> {renderPaymentStatus(reservacion.paymentStatus)}</p>
+                                    <p><strong>Nombre:</strong><br></br>{reservacion.nombre} {reservacion.apellido}</p>
+                                    <p><strong>Fecha:</strong> <br></br> {formatDate(reservacion.fecha)}</p>
+                                    <p><strong>Hora:</strong> <br></br> {reservacion.hora}</p>
+                                    <p><strong>Teléfono:</strong> <br></br> {reservacion.telefono}</p>
+                                    <p><strong>Email:</strong> <br></br> {reservacion.email}</p>
+                                    <p><strong>Estado de pago:</strong> <br></br> {renderPaymentStatus(reservacion.paymentStatus)}</p>
                                 </div>
                                 <div className="reservation-actions">
                                     <button

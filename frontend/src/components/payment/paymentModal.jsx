@@ -7,6 +7,20 @@ const [error, setError] = useState('');
 const [success, setSuccess] = useState('');
 const [activeTab, setActiveTab] = useState('mobile');
 
+// Función para formatear la fecha de manera segura
+const formatDate = (dateString) => {
+  if (!dateString) return 'Fecha no disponible';
+  
+  const date = new Date(dateString);
+  
+  // Verificar si la fecha es válida
+  if (isNaN(date.getTime())) {
+    return 'Fecha no válida';
+  }
+  
+  return date.toLocaleDateString('es-ES');
+};
+
 // Datos del club (puedes reemplazar con datos reales)
 const clubData = {
 name: 'Club de Pádel Command Park',
@@ -86,7 +100,7 @@ return (
 <div className="payment-modal-overlay">
     <div className="payment-modal">
     <div className="payment-modal-header">
-        <h2>Realizar Pago</h2>
+        <h2>Realizar Pago 💳</h2>
         <button className="close-button" onClick={onHide}>&times;</button>
     </div>
     
@@ -94,23 +108,29 @@ return (
         <div className="payment-details">
         <h3>Detalles del Pago</h3>
         <p><strong>Tipo:</strong> {itemType === 'reserva' ? 'Reserva' : itemType === 'torneo' ? 'Torneo' : 'Clase'}</p>
-        <p><strong>Fecha:</strong> {new Date(item.fecha).toLocaleDateString('es-ES')}</p>
-        {itemType === 'reserva' && <p><strong>Hora:</strong> {item.hora}</p>}
+        <p><strong>Fecha:</strong> {formatDate(item.Fecha)}</p>
+        {itemType === 'reserva' && <p><strong>Hora:</strong> {item.Hora}</p>}
         <p><strong>Monto:</strong> ${item.amount || clubData.price}</p>
         </div>
         
         <div className="payment-tabs">
-        <div 
+        <div
             className={`payment-tab ${activeTab === 'mobile' ? 'active' : ''}`}
             onClick={() => setActiveTab('mobile')}
         >
-            Pago Móvil
+            Pago Móvil 📱
         </div>
-        <div 
+        <div
             className={`payment-tab ${activeTab === 'paypal' ? 'active' : ''}`}
             onClick={() => setActiveTab('paypal')}
         >
-            PayPal
+            PayPal 💸
+        </div>
+        <div
+            className={`payment-tab ${activeTab === 'efectivo' ? 'active' : ''}`}
+            onClick={() => setActiveTab('efectivo')}
+        >
+            Efectivo 💵
         </div>
         </div>
         
@@ -128,8 +148,8 @@ return (
             <form onSubmit={handleMobilePaymentSubmit}>
                 <div className="form-group">
                 <label>Comprobante de Pago</label>
-                <input 
-                    type="file" 
+                <input
+                    type="file"
                     accept="image/*"
                     onChange={handleFileChange}
                     required
@@ -140,12 +160,12 @@ return (
                 {error && <div className="error-message">{error}</div>}
                 {success && <div className="success-message">{success}</div>}
                 
-                <button 
-                type="submit" 
+                <button
+                type="submit"
                 className="submit-payment-btn"
                 disabled={loading || !paymentProof}
                 >
-                {loading ? 'Procesando...' : 'Enviar Comprobante'}
+                {loading ? 'Procesando...' : 'Enviar Comprobante 📤'}
                 </button>
             </form>
             </div>
@@ -155,6 +175,16 @@ return (
             <div className="paypal-payment">
             <p>La integración con PayPal estará disponible próximamente.</p>
             <p>Por favor, utiliza la opción de Pago Móvil por ahora.</p>
+            
+            {/* Aquí iría la integración real con PayPal */}
+            </div>
+        )}
+
+        {activeTab === 'efectivo' && (
+            <div className="efectivo-payment">
+            <p>Para cancelar en efectivo, acércate a nuestra caja en el club.</p>
+            <p>Luego de cancelar tu Reserva o Inscripción, podrás disfrutar de 2 horas de puro Pádel.</p>
+            <p>Ven y Disfruta de la mejor experiencia, ¡te esperamos!</p>
             
             {/* Aquí iría la integración real con PayPal */}
             </div>

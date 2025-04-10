@@ -86,12 +86,6 @@ return (
             </div>
             <div className="friend-actions">
             <button 
-                className="invite-game-btn"
-                onClick={() => alert(`Funcionalidad para invitar a ${friend.name} a jugar`)}
-            >
-                Invitar a jugar
-            </button>
-            <button 
                 className="remove-friend-btn"
                 onClick={() => handleRemoveFriend(friend.id)}
             >

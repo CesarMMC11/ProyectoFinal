@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { gsap } from 'gsap'; // Importamos GSAP
 import Logo from '../../src/components/logo';
 import Footer from '../../src/components/footer';
 
@@ -10,7 +11,27 @@ const Login = ({ setIsAuthenticated }) => {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    
+
+    // Creamos referencias para los elementos que animaremos
+    const logoRef = useRef(null);
+    const formRef = useRef(null);
+
+    useEffect(() => {
+        // Animación del logo desde la izquierda
+        gsap.fromTo(
+            logoRef.current, 
+            { x: '-100%', opacity: 0 }, 
+            { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out' }
+        );
+
+        // Animación del formulario desde la derecha
+        gsap.fromTo(
+            formRef.current,
+            { x: '100%', opacity: 0 },
+            { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out', delay: 0.5 }
+        );
+    }, []);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -34,21 +55,16 @@ const Login = ({ setIsAuthenticated }) => {
 
             const data = await response.json();
         
-            // En la función handleSubmit de tu componente Login.jsx
             if (response.ok) {
-                alert(data.message); // Inicio de sesión exitoso
-                localStorage.setItem('token', data.token); // Guarda el token
-                
-                // Guardar el rol del usuario
+                alert(data.message);
+                localStorage.setItem('token', data.token);
                 localStorage.setItem('userRole', data.user.rol || 'user');
-                
-                setIsAuthenticated(true); // Actualiza el estado de autenticación
-                
-                // Redirigir según el rol
+                setIsAuthenticated(true);
+
                 if (data.user.rol === 'admin') {
                     navigate('/admin/dashboard');
                 } else {
-                    navigate('/'); // Redirige al usuario regular a la página de inicio
+                    navigate('/');
                 }
             } else {
                 setError(data.message || 'Error al iniciar sesión');
@@ -63,10 +79,14 @@ const Login = ({ setIsAuthenticated }) => {
     return (
         <>
             <div className="form-team">
-                <Logo />
+                {/* Añadimos la referencia al logo */}
+                <div ref={logoRef}>
+                    <Logo />
+                </div>
                 <div className="forms-container">
-                    <div className="form-box">
-                        <h2 className="form-title">LOGIN</h2>
+                    {/* Añadimos la referencia al formulario */}
+                    <div className="form-box" ref={formRef}>
+                        <h2 className="form-title">INICIO DE SESIÓN</h2>
                         {error && <p className="error-message">{error}</p>}
                         <form onSubmit={handleSubmit}>
                             <div className="input-group">
@@ -91,7 +111,7 @@ const Login = ({ setIsAuthenticated }) => {
                                     required
                                 />
                             </div>
-                            <button type="submit" className="submit-btn">LOGIN</button>
+                            <button type="submit" className="submit-btn">INICIAR SESIÓN</button>
                             <div className="forgot-password">
                                 <a href="/registro"> ¿Aún no tienes cuenta? Regístrate aquí! </a>
                                 <br />

@@ -1,4 +1,4 @@
-const { User, Reserva, Clase, Torneo } = require('../models');
+const { User, Reserva, Clase, Torneo, Payment } = require('../models');
 
 const adminController = {
 // Usuarios
@@ -165,6 +165,7 @@ deleteTorneo: async (req, res) => {
     }
 },
 
+
 // Estadísticas
 getStats: async (req, res) => {
     try {
@@ -172,12 +173,15 @@ getStats: async (req, res) => {
         const totalReservations = await Reserva.count();
         const totalClasses = await Clase.count();
         const totalTournaments = await Torneo.count();
+        const totalPayments = await Payment.count();
+
         
         res.json({
             totalUsers,
             totalReservations,
             totalClasses,
-            totalTournaments
+            totalTournaments,
+            totalPayments
         });
     } catch (error) {
         console.error('Error al obtener estadísticas:', error);
