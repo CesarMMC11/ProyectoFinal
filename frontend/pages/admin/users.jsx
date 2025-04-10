@@ -18,7 +18,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3456/admin/users', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/admin/users`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -49,7 +49,7 @@ const AdminUsers = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/admin/users/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

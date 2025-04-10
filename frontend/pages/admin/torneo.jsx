@@ -16,7 +16,7 @@ const AdminTournaments = () => {
     const fetchTournaments = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3456/admin/torneos', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/admin/torneos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -42,7 +42,7 @@ const AdminTournaments = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/admin/torneos/${tournamentId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/torneos/${tournamentId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

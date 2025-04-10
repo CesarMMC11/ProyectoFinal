@@ -24,7 +24,7 @@ const AdminDashboard = () => {
                     throw new Error('No se encontró token de autenticación');
                 }
                 
-                const response = await fetch('http://localhost:3456/admin/stats', {
+                const response = await fetch( `${import.meta.env.VITE_API_URL}/admin/stats`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

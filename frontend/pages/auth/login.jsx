@@ -5,6 +5,8 @@ import Logo from '../../src/components/logo';
 import Footer from '../../src/components/footer';
 
 const Login = ({ setIsAuthenticated }) => {
+
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -42,7 +44,7 @@ const Login = ({ setIsAuthenticated }) => {
         setError('');
 
         try {
-            const response = await fetch('http://localhost:3456/api/login', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/api/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

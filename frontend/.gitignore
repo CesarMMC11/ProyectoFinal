@@ -1,3 +1,8 @@
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
 # Logs
 logs
 *.log
@@ -7,6 +12,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencias
 node_modules
 dist
 dist-ssr

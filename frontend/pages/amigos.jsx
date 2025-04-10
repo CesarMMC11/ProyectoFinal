@@ -5,9 +5,12 @@ import PendingRequests from '../src/components/friendsComponents/pendingRequest'
 import FriendsList from '../src/components/friendsComponents/friendList';
 
 const Amigos = () => {
+    
+
     const [activeTab, setActiveTab] = useState('list');
     const navigate = useNavigate(); // Hook para navegación
     const [pendingRequests, setPendingRequests] = useState([]);
+
 
     // Función para obtener las solicitudes pendientes
     const fetchPendingRequests = async () => {
@@ -15,7 +18,7 @@ const Amigos = () => {
             const token = localStorage.getItem('token');
             if (!token) return;
             
-            const response = await fetch('http://localhost:3456/amigos/pending', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/amigos/pending`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

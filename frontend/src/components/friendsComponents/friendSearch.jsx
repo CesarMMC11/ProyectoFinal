@@ -17,7 +17,7 @@ setError('');
 
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3456/amigos/search?query=${searchQuery}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos/search?query=${searchQuery}`, {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -43,7 +43,7 @@ try {
 const handleSendRequest = async (userId) => {
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3456/amigos/request', {
+    const response = await fetch( `${import.meta.env.VITE_API_URL}/amigos/request`, {
     method: 'POST',
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -75,7 +75,7 @@ try {
 const handleAcceptRequest = async (requestId) => {
 try {
     const token = localStorage.getItem('token');
-const response = await fetch(`http://localhost:3456/amigos/accept/${requestId}`, {
+const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos/accept/${requestId}`, {
     method: 'PUT',
     headers: {
         'Authorization': `Bearer ${token}`,

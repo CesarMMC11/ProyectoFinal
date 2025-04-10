@@ -59,7 +59,7 @@ try {
     formData.append('method', 'mobile');
     
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3456/payments/upload-proof', {
+    const response = await fetch( `${import.meta.env.VITE_API_URL}/payments/upload-proof`, {
     method: 'POST',
     headers: {
         'Authorization': `Bearer ${token}`

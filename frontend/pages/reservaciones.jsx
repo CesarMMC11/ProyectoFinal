@@ -52,7 +52,7 @@ const fetchReservaciones = async () => {
         }
         
         // Intentar primero con la ruta específica para usuario autenticado
-        let apiUrl = 'http://localhost:3456/reservas/user';
+        let apiUrl = `${import.meta.env.VITE_API_URL}/reservas/user`;
         console.log('Intentando obtener reservaciones desde:', apiUrl);
         
         let response = await fetch(apiUrl, {
@@ -65,7 +65,7 @@ const fetchReservaciones = async () => {
         
         // Si la primera ruta falla, intentar con la ruta general
         if (response.status === 404) {
-            apiUrl = 'http://localhost:3456/reservas';
+            apiUrl = `${import.meta.env.VITE_API_URL}/reservas`;
             console.log('Primera ruta falló, intentando con:', apiUrl);
             
             response = await fetch(apiUrl, {
@@ -141,8 +141,8 @@ const handleSubmit = async (e) => {
 
         // URL y método según si estamos editando o creando
         const url = editMode
-            ? `http://localhost:3456/reservas/update/${editId}`
-            : 'http://localhost:3456/reservas/create';
+            ? `${import.meta.env.VITE_API_URL}/reservas/update/${editId}`
+            : `${import.meta.env.VITE_API_URL}/reservas/create`;
         const method = editMode ? 'PUT' : 'POST';
         
         console.log(`Enviando solicitud ${method} a:`, url);
@@ -232,7 +232,7 @@ const handleDelete = async (id) => {
             return;
         }
         
-        const url = `http://localhost:3456/reservas/delete/${id}`;
+        const url = `${import.meta.env.VITE_API_URL}/reservas/delete/${id}`;
         console.log('Enviando solicitud DELETE a:', url);
         
         const response = await fetch(url, {

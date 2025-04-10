@@ -16,7 +16,7 @@ const PaymentManagement = () => {
             setLoading(true);
             const token = localStorage.getItem('token');
             
-            const response = await fetch('http://localhost:3456/payments', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/payments`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -48,7 +48,7 @@ const PaymentManagement = () => {
         try {
             const token = localStorage.getItem('token');
             
-            const response = await fetch(`http://localhost:3456/payments/${paymentId}/status`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/${paymentId}/status`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -197,7 +197,7 @@ const PaymentManagement = () => {
                                             {payment.proofImage && (
                                                 <button 
                                                     className="view-proof-btn"
-                                                    onClick={() => window.open(`http://localhost:3456${payment.proofImage}`, '_blank')}
+                                                    onClick={() => window.open(`${import.meta.env.VITE_API_URL}${payment.proofImage}`, '_blank')}
                                                 >
                                                     Ver comprobante
                                                 </button>

@@ -25,7 +25,7 @@ try {
     
     if (!token) return;
     
-    const response = await fetch('http://localhost:3456/amigos/pending', {
+    const response = await fetch( `${import.meta.env.VITE_API_URL}/amigos/pending`, {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}`,

@@ -52,7 +52,7 @@ const Clases = () => {
            
             console.log('Obteniendo inscripciones a clases...');
            
-            const response = await fetch('http://localhost:3456/clases/user', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/clases/user`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -119,8 +119,8 @@ const Clases = () => {
    
             // URL y método según si estamos editando o creando
             const url = editMode
-                ? `http://localhost:3456/clases/${editId}`
-                : 'http://localhost:3456/clases/create';
+                ? `${import.meta.env.VITE_API_URL}/clases/${editId}`
+                : `${import.meta.env.VITE_API_URL}/clases/create`;
             const method = editMode ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
@@ -187,7 +187,7 @@ const Clases = () => {
                 return;
             }
            
-            const response = await fetch(`http://localhost:3456/clases/${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/clases/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,

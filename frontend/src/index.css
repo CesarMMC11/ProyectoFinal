@@ -3343,6 +3343,39 @@ footer {
   border-collapse: collapse;
 }
 
+
+
+/* Estilos para tablas */
+
+.admin-table  {
+  width: 100vw;
+  margin-top: 10px;
+}
+
+.admin-table th {
+  gap: 10px
+}
+
+@media (max-width: 768px) {
+  .admin-table {
+    width: 100%;
+  }
+
+  .admin-table th {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    margin-bottom: .5rem;
+
+  }
+
+  .admin-table td {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    margin-bottom: .5rem;
+
+  }
+}
+
 .payments-table th,
 .payments-table td {
   padding: 12px 15px;

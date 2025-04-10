@@ -12,7 +12,7 @@ fetchFriends();
 const fetchFriends = async () => {
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3456/amigos', {
+    const response = await fetch( `${import.meta.env.VITE_API_URL}/amigos`, {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -42,7 +42,7 @@ if (!window.confirm('¿Estás seguro de que deseas eliminar a este amigo?')) {
 
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3456/amigos/${friendId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos/${friendId}`, {
     method: 'DELETE',
     headers: {
         'Authorization': `Bearer ${token}`,
