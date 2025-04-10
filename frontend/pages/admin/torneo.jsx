@@ -85,7 +85,7 @@ const AdminTournaments = () => {
                     ) : error ? (
                         <p className="error-message">{error}</p>
                     ) : (
-                        <table className="admin-table">
+                        <table className="payments-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -105,7 +105,7 @@ const AdminTournaments = () => {
                                         <td>{tournament.id}</td>
                                         <td>{tournament.userID}</td>
                                         <td>{tournament.nombre}</td>
-                                        <td>{tournament.invitados}</td>
+                                        <td>{tournament.invitado}</td>
                                         <td>{formatDate(tournament.fecha)}</td>
                                         <td>{tournament.hora}</td>
                                         <td>{tournament.telefono}</td>

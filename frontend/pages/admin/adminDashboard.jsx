@@ -8,7 +8,8 @@ const AdminDashboard = () => {
         totalUsers: 0,
         totalReservations: 0,
         totalClasses: 0,
-        totalTournaments: 0
+        totalTournaments: 0,
+        totalPayments:0
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -52,7 +53,7 @@ const AdminDashboard = () => {
             <AdminSidebar />
             <div className="admin-content">
                 <AdminHeader title="Panel de Control" />
-               
+
                 {loading ? (
                     <div className="loading-container">
                         <p>Cargando estadísticas...</p>
@@ -89,9 +90,15 @@ const AdminDashboard = () => {
                             value={stats.totalTournaments}
                             icon="🏆"
                         />
+
+                        <StatsCard
+                            title="Pagos"
+                            value={stats.totalPayments}
+                            icon="  💳"
+                        />
                     </div>
                 )}
-               
+
                 <div className="admin-card">
                     <h2>Acciones Rápidas</h2>
                     <div className="action-buttons">
@@ -106,6 +113,9 @@ const AdminDashboard = () => {
                         </button>
                         <button onClick={() => window.location.href = '/admin/tournaments'}>
                             Administrar Torneos
+                        </button>
+                        <button onClick={() => window.location.href = '/admin/payments'}>
+                            Administrar Pagos
                         </button>
                     </div>
                 </div>

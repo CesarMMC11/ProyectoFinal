@@ -85,7 +85,7 @@ const AdminClasses = () => {
                     ) : error ? (
                         <p className="error-message">{error}</p>
                     ) : (
-                        <table className="admin-table">
+                        <table className="payments-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>

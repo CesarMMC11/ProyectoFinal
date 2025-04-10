@@ -433,13 +433,13 @@ const Torneo = () => {
                         {inscripciones.map((inscripcion) => (
                             <div key={inscripcion.id || Math.random()} className="reservation-card">
                                 <div className="reservation-details">
-                                    <h3>{inscripcion.nombre}</h3>
-                                    <p><strong>Fecha:</strong> {formatDate(inscripcion.fecha)}</p>
-                                    <p><strong>Hora:</strong> {inscripcion.hora}</p>
-                                    <p><strong>Invitado:</strong> {inscripcion.invitado}</p>
-                                    <p><strong>Teléfono:</strong> {inscripcion.telefono}</p>
-                                    <p><strong>Email:</strong> {inscripcion.email}</p>
-                                    <p><strong>Estado de pago:</strong> {renderPaymentStatus(inscripcion.paymentStatus)}</p>
+                                    <p><strong>Nombre:</strong><br />{inscripcion.nombre}</p>
+                                    <p><strong>Fecha:</strong> <br /> {formatDate(inscripcion.fecha)}</p>
+                                    <p><strong>Hora:</strong> <br /> {inscripcion.hora}</p>
+                                    <p><strong>Invitado:</strong> <br /> {inscripcion.invitado}</p>
+                                    <p><strong>Teléfono:</strong> <br />{inscripcion.telefono}</p>
+                                    <p><strong>Email:</strong> <br />{inscripcion.email}</p>
+                                    <p><strong>Estado de pago:</strong> <br /> {renderPaymentStatus(inscripcion.paymentStatus)}</p>
                                 </div>
                                 <div className="reservation-actions">
                                     <button

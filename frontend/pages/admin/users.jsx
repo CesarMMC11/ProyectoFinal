@@ -80,7 +80,7 @@ const AdminUsers = () => {
                 <AdminHeader title="Gestión de Usuarios" />
                         <h2>Lista de Usuarios</h2>
 
-                <div className="admin-card">
+                <div className="payments-table">
                     
                     {loading ? (
                         <p>Cargando usuarios...</p>
