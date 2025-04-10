@@ -9,7 +9,7 @@ const SectionImage = ({ section }) => {
         const fetchImage = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:3456/images/section/${section}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/images/section/${section}`);
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -45,7 +45,7 @@ const SectionImage = ({ section }) => {
     return (
         <div className="section-image-container">
             <img 
-                src={`http://localhost:3456${image.path}`} 
+                src={`${import.meta.env.VITE_API_URL}${image.path}`} 
                 alt={`Imagen de ${section}`} 
                 className="section-image"
             />

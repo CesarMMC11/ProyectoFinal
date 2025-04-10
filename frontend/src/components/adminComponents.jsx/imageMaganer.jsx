@@ -29,7 +29,7 @@ const ImageManager = ({ section }) => {
 
     const fetchImage = async () => {
         try {
-            const response = await fetch(`http://localhost:3456/images/section/${normalizedSection}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/images/section/${normalizedSection}`);
             if (response.ok) {
                 const data = await response.json();
                 setImage(data);
@@ -66,7 +66,7 @@ const ImageManager = ({ section }) => {
             console.log('Enviando sección:', normalizedSection);
             
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3456/images/upload', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/images/upload`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -103,7 +103,7 @@ const ImageManager = ({ section }) => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/images/${image.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/images/${image.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -133,7 +133,7 @@ const ImageManager = ({ section }) => {
                 <div className="current-image">
                     <h4>Imagen actual:</h4>
                     <img
-                        src={`http://localhost:3456${image.path}`}
+                        src={`${import.meta.env.VITE_API_URL}${image.path}`}
                         alt={`Imagen de ${section}`}
                     />
                     <button

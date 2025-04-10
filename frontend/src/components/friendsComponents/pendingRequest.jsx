@@ -12,7 +12,7 @@ fetchPendingRequests();
 const fetchPendingRequests = async () => {
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch('http://localhost:3456/amigos/pending', {
+    const response = await fetch( `${import.meta.env.VITE_API_URL}/amigos/pending`, {
     method: 'GET',
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -38,7 +38,7 @@ try {
 const handleAcceptRequest = async (requestId) => {
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3456/amigos/accept/${requestId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos/accept/${requestId}`, {
     method: 'PUT',
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -65,7 +65,7 @@ try {
 const handleRejectRequest = async (requestId) => {
 try {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3456/amigos/reject/${requestId}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos/reject/${requestId}`, {
     method: 'PUT',
     headers: {
         'Authorization': `Bearer ${token}`,

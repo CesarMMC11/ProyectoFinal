@@ -36,7 +36,7 @@ const Perfil = () => {
     const fetchUserData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/user/profile`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -55,12 +55,12 @@ const Perfil = () => {
            
             // Establecer las imágenes si existen
             if (data.fotoPerfil) {
-                setProfileImage(`http://localhost:3456${data.fotoPerfil}`);
+                setProfileImage(`${import.meta.env.VITE_API_URL}${data.fotoPerfil}`);
             }
             if (data.fotoPortada) {
-                setCoverImage(`http://localhost:3456${data.fotoPortada}`);
+                setCoverImage(`${import.meta.env.VITE_API_URL}${data.fotoPortada}`);
             }
-           
+
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
@@ -74,7 +74,7 @@ const Perfil = () => {
         try {
             setLoadingFriends(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/amigos`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/amigos`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ const Perfil = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/user/profile/update`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/profile/update`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ const Perfil = () => {
             formData.append('fotoPerfil', file);
 
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/user/profile/upload-profile-image`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/profile/upload-profile-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -180,7 +180,7 @@ const Perfil = () => {
 
             const data = await response.json();
             // Actualizar la imagen con la URL del servidor
-            setProfileImage(`http://localhost:3456${data.profileImg}`);
+            setProfileImage(`${import.meta.env.VITE_API_URL}${data.profileImg}`);
             showNotification('success', 'Imagen de perfil actualizada con éxito');
         } catch (error) {
             console.error('Error:', error);
@@ -203,7 +203,7 @@ const Perfil = () => {
             formData.append('fotoPortada', file);
 
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/user/profile/upload-cover-image`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/user/profile/upload-cover-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -217,7 +217,7 @@ const Perfil = () => {
 
             const data = await response.json();
             // Actualizar la imagen con la URL del servidor
-            setCoverImage(`http://localhost:3456${data.coverImg}`);
+            setCoverImage(`${import.meta.env.VITE_API_URL}${data.coverImg}`);
             showNotification('success', 'Imagen de portada actualizada con éxito');
         } catch (error) {
             console.error('Error:', error);
@@ -273,7 +273,7 @@ const Perfil = () => {
                                 <div className="friend-image">
                                     {friend.profileImg ? (
                                         <img
-                                            src={`http://localhost:3456${friend.profileImg}`}
+                                            src={`${import.meta.env.VITE_API_URL}${friend.profileImg}`}
                                             alt={`${friend.name}`}
                                         />
                                     ) : (

@@ -7,7 +7,7 @@ const AdminReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-   
+
     useEffect(() => {
         fetchReservations();
     }, []);
@@ -15,7 +15,7 @@ const AdminReservations = () => {
     const fetchReservations = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3456/admin/reservas', {
+            const response = await fetch( `${import.meta.env.VITE_API_URL}/admin/reservas`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -41,7 +41,7 @@ const AdminReservations = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/admin/reservas/${reservationId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/reservas/${reservationId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

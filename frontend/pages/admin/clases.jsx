@@ -17,7 +17,7 @@ const AdminClasses = () => {
     const fetchClasses = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3456/admin/clases', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/clases`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -43,7 +43,7 @@ const AdminClasses = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3456/admin/clases/${classId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/admin/clases/${classId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
