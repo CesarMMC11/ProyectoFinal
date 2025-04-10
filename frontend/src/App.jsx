@@ -60,9 +60,11 @@ const App = () => {
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
 
+                <Route path="/" element={<Navigate to="/login" />} />
+
 
                 {/* Rutas Protegidas para usuarios regulares */}
-                <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+                <Route path="/home" element={<ProtectedRoute element={<Home />} />} />
                 <Route path="/reservaciones" element={<ProtectedRoute element={<Reservaciones />} />} />
                 <Route path="/torneos" element={<ProtectedRoute element={<Torneo />} />} />
                 <Route path="/clases" element={<ProtectedRoute element={<Clases />} />} />
