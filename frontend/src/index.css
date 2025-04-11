@@ -557,6 +557,12 @@ footer {
   }
 }
 
+@media (max-width: 768px) {
+  .footer-bottom {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
 
 .contactoFooter a {
   text-decoration: none;
