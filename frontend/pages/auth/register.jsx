@@ -19,21 +19,21 @@ const Registro = () => {
         const logoRef = useRef(null);
         const formRef = useRef(null);
 
-        useEffect(() => {
-            gsap.fromTo(
-                logoRef.current,
-                { x: '-100%', opacity: 0},
-                { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out' }
-            )
-        });
+        // useEffect(() => {
+        //     gsap.fromTo(
+        //         logoRef.current,
+        //         { x: '-100%', opacity: 0},
+        //         { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out' }
+        //     )
+        // });
 
-        useEffect(() => {
-            gsap.fromTo(
-                formRef.current,
-                { x: '100%', opacity: 0},
-                { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out', delay: 0.5 }
-            )
-        })
+        // useEffect(() => {
+        //     gsap.fromTo(
+        //         formRef.current,
+        //         { x: '100%', opacity: 0},
+        //         { x: '0%', opacity: 1, duration: 1.5, ease: 'power3.out', delay: 0.5 }
+        //     )
+        // })
 
     const handleChange = (e) => {
         const { name, value } = e.target;
