@@ -108,8 +108,8 @@ return (
         <div className="payment-details">
         <h3>Detalles del Pago</h3>
         <p><strong>Tipo:</strong> {itemType === 'reserva' ? 'Reserva' : itemType === 'torneo' ? 'Torneo' : 'Clase'}</p>
-        <p><strong>Fecha:</strong> {formatDate(item.Fecha)}</p>
-        {itemType === 'reserva' && <p><strong>Hora:</strong> {item.Hora}</p>}
+        <p><strong>Fecha:</strong> {formatDate(item.fecha)}</p>
+        {itemType === 'reserva' && <p><strong>Hora:</strong> {item.hora}</p>}
         <p><strong>Monto:</strong> ${item.amount || clubData.price}</p>
         </div>
         
