@@ -66,7 +66,7 @@ const Login = ({ setIsAuthenticated }) => {
                 if (data.user.rol === 'admin') {
                     navigate('/admin/dashboard');
                 } else {
-                    navigate('/home');
+                    navigate('/');
                 }
             } else {
                 setError(data.message || 'Error al iniciar sesión');
