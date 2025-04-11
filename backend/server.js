@@ -8,6 +8,8 @@ const path = require('path');
 const cron = require('node-cron'); // Importar node-cron
 const { Reserva, Torneo, Clase } = require('./models'); // Importar los modelos
 const { Op } = require('sequelize'); // Importar operadores de Sequelize
+// Configuración de la base de datos
+const sequelize = require('./config/db');
 
 // Cargar variables de entorno
 dotenv.config();
